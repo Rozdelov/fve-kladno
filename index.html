@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>FVE Kladno</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap');
@@ -29,7 +29,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 32px 16px 48px;
+      padding: 16px 16px 24px;
       overscroll-behavior-y: contain;
     }
 
@@ -40,9 +40,9 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 28px;
+      margin-bottom: 8px;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 16px;
+      padding-bottom: 10px;
     }
     header h1 {
       font-family: var(--mono);
@@ -102,7 +102,7 @@
       border: 1px solid var(--border);
       overflow: hidden;
       position: relative;
-      touch-action: pinch-zoom;
+      touch-action: auto;
     }
 
     #gallery-image {
@@ -143,7 +143,7 @@
 
     /* ── Controls ── */
     .controls {
-      margin-top: 22px;
+      margin-top: 8px;
       display: flex;
       gap: 10px;
       align-items: center;
@@ -397,9 +397,14 @@
   // ── Dotykové ovládání ────────────────────────────────────────────
   let tx = 0, ty = 0;
   const tz = document.getElementById('touch-zone');
-  tz.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
-  tz.addEventListener('touchend',   e => {
-    if (!e.changedTouches.length) return;
+  tz.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) return;
+    tx = e.touches[0].clientX;
+    ty = e.touches[0].clientY;
+  }, { passive: true });
+
+  tz.addEventListener('touchend', e => {
+    if (e.touches.length > 0 || !e.changedTouches.length) return;
     const dx = tx - e.changedTouches[0].clientX;
     const dy = ty - e.changedTouches[0].clientY;
     if (Math.abs(dx) > 40 && Math.abs(dy) < 60) {
